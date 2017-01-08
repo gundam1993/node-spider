@@ -1,0 +1,14 @@
+{
+  "name": "node-spider",
+  "version": "1.0.0",
+  "description": "a spider program build with node.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "gundam1993 (gundam1993@gmail.com)",
+  "license": "MIT",
+  "dependencies": {
+    "cheerio": "^0.22.0"
+  }
+}

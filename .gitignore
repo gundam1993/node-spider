@@ -1,0 +1,6 @@
+# ignore packages installed by npm
+node_modules
+upload
+
+# put any other files you don't want to check here
+.DS_store
