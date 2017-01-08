@@ -2,7 +2,7 @@ var http = require('http');
 var cheerio = require('cheerio');
 var fs = require('fs');
 
-var queryHref = "http://www.haha.mx/topic/1/new/";
+var queryHref = "http://jandan.net/pic/page-";
 var querySearch = 1;
 var urls = [];
 
@@ -27,10 +27,10 @@ function getHtml(href, search) {
 
     res.on('end', function () {
       $ = cheerio.load(pageData);
-      var html = $('.joke-list-item .joke-main-content a img');
+      var html = $('.commentlist li div .row .text p img');
       for (var i = 0; i < html.length; i++) {
         var src = html[i].attribs.src;
-        if (src.indexOf("http://image.haha.mx") > -1) {
+        if (src.indexOf("//ww1.sinaimg.cn") > -1) {
           urls.push(html[i].attribs.src);
         }
       }
@@ -54,12 +54,14 @@ function getHtml(href, search) {
  */
 function downImg(imgurl) {
   console.log(imgurl);
-  var narr = imgurl.replace('http://image.haha.mx', '').split("/");
-  var filename = "./upload/topic1/" + narr[1] + narr[2] + narr[3] + "_" + narr[5];
+  imgurl  = `http:${imgurl}`
+  var narr = imgurl.split("/");
+  console.log(narr);
+  var filename = "./upload/topic1/" + narr[2] + "_" + narr[4];
 
   fs.exists(filename, function (b) {
     if (!b) {
-      http.get(imgurl.replace('/small/',"/big/"), function (res) {
+      http.get(imgurl.replace('/mw600/',"/large/").replace('/thumb180/',"/large/"), function (res) {
         var imgData = "";
         //一定要设置response的编码为binary否则会下载下来的图片打不开
         res.setEncoding("binary");
@@ -69,13 +71,13 @@ function downImg(imgurl) {
         });
 
         res.on("end", function () {
-          var savePath = "./upload/topic1/" + narr[1] + narr[2] + narr[3] + "_" + narr[5];
+          var savePath = "./upload/topic1/" + narr[2] + "_" + narr[4];
           //保存图片
           fs.writeFile(savePath, imgData, "binary", function (err) {
             if (err) {
               console.log(err);
             } else {
-              console.log(narr[1] + narr[2] + narr[3] + "_" + narr[5]);
+              console.log(narr[2]);
               if (urls.length > 0) {
                 downImg(urls.shift());
                 downCount++;
@@ -101,7 +103,7 @@ function downImg(imgurl) {
   
 }
 
-var pagemax = 10;   // 获取到多少页的内容
+var pagemax = 2;   // 获取到多少页的内容
 var startindex = 1;   // 从多少页开始获取
 
 
